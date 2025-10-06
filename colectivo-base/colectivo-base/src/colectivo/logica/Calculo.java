@@ -24,11 +24,15 @@ public class Calculo {
 		
 		// Buscar rutas directas (sin transbordo)
 		List<List<Recorrido>> rutasDirectas = buscarRutasDirectas(paradaOrigen, paradaDestino, diaSemana, horaLlegaParada, tramos);
-		resultados.addAll(rutasDirectas);
 		
-		// Buscar rutas con un transbordo
-		List<List<Recorrido>> rutasConTransbordo = buscarRutasConTransbordo(paradaOrigen, paradaDestino, diaSemana, horaLlegaParada, tramos);
-		resultados.addAll(rutasConTransbordo);
+		// Si hay rutas directas, retornarlas. Si no, buscar rutas con transbordo
+		if (!rutasDirectas.isEmpty()) {
+			resultados.addAll(rutasDirectas);
+		} else {
+			// Buscar rutas con un transbordo
+			List<List<Recorrido>> rutasConTransbordo = buscarRutasConTransbordo(paradaOrigen, paradaDestino, diaSemana, horaLlegaParada, tramos);
+			resultados.addAll(rutasConTransbordo);
+		}
 		
 		return resultados;
 	}
@@ -54,14 +58,21 @@ public class Calculo {
 				// Calcular el recorrido
 				List<Parada> paradasRecorrido = paradasLinea.subList(indexOrigen, indexDestino + 1);
 				
-				// Calcular duración total
+				// Calcular duración total del recorrido de origen a destino
 				int duracion = calcularDuracion(paradasRecorrido, tramos);
 				
-				// Encontrar la próxima frecuencia disponible
-				LocalTime horaSalida = encontrarProximaFrecuencia(linea, diaSemana, horaLlegaParada);
+				// Calcular el tiempo desde el inicio de la línea hasta el origen
+				List<Parada> paradasHastaOrigen = paradasLinea.subList(0, indexOrigen + 1);
+				int tiempoHastaOrigen = calcularDuracion(paradasHastaOrigen, tramos);
 				
-				if (horaSalida != null) {
-					Recorrido recorrido = new Recorrido(linea, new ArrayList<>(paradasRecorrido), horaSalida, duracion);
+				// Encontrar la próxima frecuencia disponible (desde el inicio de la línea)
+				LocalTime horaInicioLinea = encontrarProximaFrecuenciaParaLlegada(linea, diaSemana, horaLlegaParada, tiempoHastaOrigen);
+				
+				if (horaInicioLinea != null) {
+					// La hora de salida desde el origen es la hora de inicio + tiempo hasta origen
+					LocalTime horaSalidaOrigen = horaInicioLinea.plusSeconds(tiempoHastaOrigen);
+					
+					Recorrido recorrido = new Recorrido(linea, new ArrayList<>(paradasRecorrido), horaSalidaOrigen, duracion);
 					List<Recorrido> ruta = new ArrayList<>();
 					ruta.add(recorrido);
 					rutas.add(ruta);
@@ -169,15 +180,15 @@ public class Calculo {
 			for (int i = indexOrigen + 1; i < paradasLineaOrigen.size(); i++) {
 				Parada candidata = paradasLineaOrigen.get(i);
 				
-				// Verificar si esta parada comparte línea con destino
+				// Verificar si esta parada comparte línea con destino (pero diferente a lineaOrigen)
 				for (Linea lineaDestino : paradaDestino.getLineas()) {
-					if (candidata.getLineas().contains(lineaDestino)) {
+					if (!lineaDestino.equals(lineaOrigen) && candidata.getLineas().contains(lineaDestino)) {
 						List<Parada> paradasLineaDestino = lineaDestino.getParadas();
 						int indexCandidataDestino = paradasLineaDestino.indexOf(candidata);
 						int indexDestino = paradasLineaDestino.indexOf(paradaDestino);
 						
 						// Verificar que el destino está después de la candidata
-						if (indexCandidataDestino < indexDestino) {
+						if (indexCandidataDestino >= 0 && indexCandidataDestino < indexDestino) {
 							intermedias.add(candidata);
 						}
 					}
@@ -223,6 +234,26 @@ public class Calculo {
 		}
 		
 		return proximaHora;
+	}
+
+	private static LocalTime encontrarProximaFrecuenciaParaLlegada(Linea linea, int diaSemana, LocalTime horaLlegadaAParada, int tiempoHastaParada) {
+		LocalTime proximaHoraInicio = null;
+		
+		for (Frecuencia frecuencia : linea.getFrecuencias()) {
+			if (frecuencia.getDiaSemana() == diaSemana) {
+				LocalTime horaInicio = frecuencia.getHora();
+				LocalTime horaLlegada = horaInicio.plusSeconds(tiempoHastaParada);
+				
+				// Verificar si este bus llega a la parada después de la hora requerida
+				if (horaLlegada.isAfter(horaLlegadaAParada) || horaLlegada.equals(horaLlegadaAParada)) {
+					if (proximaHoraInicio == null || horaInicio.isBefore(proximaHoraInicio)) {
+						proximaHoraInicio = horaInicio;
+					}
+				}
+			}
+		}
+		
+		return proximaHoraInicio;
 	}
 
 }
