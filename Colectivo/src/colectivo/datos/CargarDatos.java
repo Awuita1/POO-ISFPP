@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalTime;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -17,7 +18,8 @@ public class CargarDatos {
 	public static Map<Integer, Parada> cargarParadas(String nombreArchivo) throws IOException {
         Map<Integer, Parada> paradas = new TreeMap<>();
         Scanner read = new Scanner(new File(nombreArchivo));
-        read.useDelimiter(";");
+        read.useLocale(Locale.ROOT);
+        read.useDelimiter("\\s*;\\s*");
 
         while(read.hasNext()) {
             int id = read.nextInt();
