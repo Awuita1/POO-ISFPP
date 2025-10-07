@@ -10,6 +10,10 @@ public class Recorrido {
 	private LocalTime horaSalida;
 	private int duracion;
 
+    public Recorrido(){
+
+    }
+
 	public Recorrido(Linea linea, List<Parada> paradas, LocalTime horaSalida, int duracion) {
 		super();
 		this.linea = linea;
