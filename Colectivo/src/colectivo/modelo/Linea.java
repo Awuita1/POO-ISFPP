@@ -54,6 +54,11 @@ public class Linea {
 		return paradas;
 	}
 
+	public List<Frecuencia> getFrecuencias() {
+		return frecuencias;
+	}
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
