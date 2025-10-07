@@ -6,6 +6,7 @@ import colectivo.modelo.Linea;
 import colectivo.modelo.Parada;
 import colectivo.modelo.Tramo;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.time.LocalTime;
@@ -40,6 +41,7 @@ class TestCarga {
         horaLlegaParada = LocalTime.of(10, 35); // hora de llegada a la parada
     }
 
+    @Test
     void printCarga(){
         System.out.println("Paradas cargadas: " + paradas.size());
         System.out.println("Lineas cargadas: " + lineas.size());
