@@ -19,15 +19,20 @@ public class CargarDatos {
         Scanner read = new Scanner(new File(nombreArchivo));
         read.useDelimiter("\\s*;\\s*");
 
-        while(read.hasNext()) {
-            int id = read.nextInt();
-            String direccion = read.next();
-            double latitud = read.nextDouble();
-            double longitud = read.nextDouble();
-
-            Parada parada = new Parada(id, direccion, latitud, longitud);
-            paradas.put(id, parada);
+        while (read.hasNext()) {
+            System.out.println("Nombre del archivo de paradas: " + nombreArchivo);
+            System.out.println("Leyendo parada...");
+            System.out.println(read.next());
         }
+//        while(read.hasNext()) {
+//            int id = read.nextInt();
+//            String direccion = read.next();
+//            double latitud = read.nextDouble();
+//            double longitud = read.nextDouble();
+//
+//            Parada parada = new Parada(id, direccion, latitud, longitud);
+//            paradas.put(id, parada);
+//        }
 
 		return paradas;
 	}
