@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.util.Map;
 
-public class TestCarga {
+class TestCarga {
     private Map<Integer, Parada> paradas;
     private Map<String, Linea> lineas;
     private Map<String, Tramo> tramos;

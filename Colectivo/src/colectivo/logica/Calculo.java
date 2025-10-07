@@ -10,8 +10,7 @@ import colectivo.modelo.Tramo;
 
 public class Calculo {
 
-	public static List<List<Recorrido>> calcularRecorrido(Parada paradaOrigen, Parada paradaDestino, int diaSemana,
-			LocalTime horaLlegaParada, Map<String, Tramo> tramos) {
+	public static List<List<Recorrido>> calcularRecorrido(Parada paradaOrigen, Parada paradaDestino, int diaSemana, LocalTime horaLlegaParada, Map<String, Tramo> tramos) {
 
 		return null;
 	}
