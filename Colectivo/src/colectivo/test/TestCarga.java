@@ -46,5 +46,17 @@ class TestCarga {
         System.out.println("Paradas cargadas: " + paradas.size());
         System.out.println("Lineas cargadas: " + lineas.size());
         System.out.println("Tramos cargados: " + tramos.size());
+
+        for(Parada i : paradas.values()){
+            System.out.println(i.toString());
+        }
+
+        for(Linea i : lineas.values()){
+            System.out.println(i.toString());
+        }
+
+        for(Tramo i: tramos.values()){
+            System.out.println(i.toString());
+        }
     }
 }
