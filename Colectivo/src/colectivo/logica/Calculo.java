@@ -24,36 +24,38 @@ public class Calculo {
      * @return Lista de listas de recorridos posibles
      */
     public static List<List<Recorrido>> calcularRecorrido(Parada paradaOrigen, Parada paradaDestino, int diaSemana,
-                                                   LocalTime horaLlegaParada, Map<String, Tramo> tramos) {
+                                                          LocalTime horaLlegaParada, Map<String, Tramo> tramos) {
         List<List<Recorrido>> recorridos = new ArrayList<>();
         List<Recorrido> recorridoActual = new ArrayList<>();
-        buscarRecorridos(paradaOrigen, paradaDestino, tramos, recorridoActual, recorridos, horaLlegaParada, diaSemana);
+        // Nueva estructura para evitar ciclos
+        List<Tramo> tramosVisitados = new ArrayList<>();
+        buscarRecorridos(paradaOrigen, paradaDestino, tramos, recorridoActual, recorridos, horaLlegaParada, diaSemana, tramosVisitados);
         return recorridos;
     }
 
     private static void buscarRecorridos(Parada actual, Parada destino, Map<String, Tramo> tramos,
-                                         List<Recorrido> recorridoActual, List<List<Recorrido>> recorridos, LocalTime horaLlegaParada, int diaSemana) {
+                                         List<Recorrido> recorridoActual, List<List<Recorrido>> recorridos,
+                                         LocalTime horaLlegaParada, int diaSemana, List<Tramo> tramosVisitados) {
         if (actual.equals(destino)) {
             recorridos.add(new ArrayList<>(recorridoActual));
             return;
         }
 
         for (Tramo i : tramos.values()) {
-            if (i.getInicio().equals(actual) && !recorridoActual.contains(i)) {
-                //defino las paradas a agregar
+            // Control de ciclo: ¿ya pasé por este tramo?
+            if (i.getInicio().equals(actual) && !tramosVisitados.contains(i)) {
                 List<Parada> paradasTramo = new ArrayList<>();
                 paradasTramo.add(i.getInicio());
                 paradasTramo.add(i.getFin());
 
-                //Defino las lineas que hay en las paradas para el recorrido
                 Linea lineaTramo = obtenerLinea(i.getInicio(), i.getFin());
-
                 Recorrido r = new Recorrido(lineaTramo, paradasTramo, horaLlegaParada, i.getTiempo());
 
-                // Agregar recorrido actual, avanzar recursivamente y después quitarlo (backtracking)
                 recorridoActual.add(r);
-                buscarRecorridos(i.getFin(), destino, tramos, recorridoActual, recorridos, horaLlegaParada, diaSemana);
+                tramosVisitados.add(i);
+                buscarRecorridos(i.getFin(), destino, tramos, recorridoActual, recorridos, horaLlegaParada, diaSemana, tramosVisitados);
                 recorridoActual.remove(recorridoActual.size() - 1);
+                tramosVisitados.remove(tramosVisitados.size() - 1);
             }
         }
     }

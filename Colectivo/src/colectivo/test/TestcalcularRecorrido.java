@@ -238,7 +238,7 @@ class TestcalcularRecorrido {
 		paradas3.add(paradas.get(76));
 		paradas3.add(paradas.get(38));
 		paradas3.add(paradas.get(40));
-		paradas3.add(paradas.get(66));		
+		paradas3.add(paradas.get(66));
 		assertIterableEquals(paradas3, recorrido3.getParadas());
 		assertEquals(LocalTime.of(11, 02), recorrido3.getHoraSalida());
 		assertEquals(600, recorrido3.getDuracion());
