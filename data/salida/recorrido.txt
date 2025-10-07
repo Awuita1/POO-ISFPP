@@ -1,0 +1,20 @@
+Parada origen: Parada [codigo=44, direccion=España, 1660]
+Parada destino: Parada [codigo=47, direccion=España, 928]
+Llega a la parada: 10:35
+============================
+Linea: Línea 1 Ida
+Paradas: [Parada [codigo=44, direccion=España, 1660], Parada [codigo=43, direccion=España, 1450], Parada [codigo=47, direccion=España, 928]]
+Hora de Salida: 10:50
+Duración: 00:03
+============================
+Duración total: 00:18
+Hora de llegada: 10:53
+============================
+Linea: Línea 5 Regreso
+Paradas: [Parada [codigo=44, direccion=España, 1660], Parada [codigo=43, direccion=España, 1450], Parada [codigo=47, direccion=España, 928]]
+Hora de Salida: 10:47:30
+Duración: 00:03
+============================
+Duración total: 00:15:30
+Hora de llegada: 10:50:30
+============================
