@@ -30,7 +30,6 @@ public class Linea {
 	}
 
 	public void agregarFrecuencia(int diaSemana, LocalTime hora) {
-
         frecuencias.add(new Frecuencia(diaSemana, hora));
 	}
 
@@ -84,4 +83,7 @@ public class Linea {
 		return "Linea [codigo=" + codigo + ", nombre=" + nombre + "]";
 	}
 
+    public List<Frecuencia> getFrecuencias() {
+        return frecuencias;
+    }
 }
